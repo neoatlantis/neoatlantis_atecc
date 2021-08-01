@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+import board
+import busio
+from neoatlantis_atecc import ATECC, _WAKE_CLK_FREQ
+
+# Initialize the i2c bus
+i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
+
+atecc = ATECC(i2c)
+print(atecc.serial_number)
