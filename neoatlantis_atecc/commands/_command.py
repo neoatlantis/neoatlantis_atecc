@@ -55,12 +55,13 @@ class COMMAND_PACKET:
         command_packet[5] = self._param2[1]# >> 8
         for i, cmd in enumerate(self._data):
             command_packet[6 + i] = cmd
-        if self._debug:
-            print("Command Packet Sz: ", len(command_packet))
-            print("\tSending:", [hex(i) for i in command_packet])
         # Checksum, CRC16 verification
         crc = crc16(command_packet[1:-2])
         command_packet[-1] = crc >> 8
         command_packet[-2] = crc & 0xFF
+
+        if self._debug:
+            print("Command Packet Sz: ", len(command_packet))
+            print("\tSending:", [hex(i) for i in command_packet])
 
         return bytes(command_packet)
