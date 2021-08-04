@@ -3,7 +3,8 @@
 import enum
 from ._command import COMMAND_PACKET
 
-from .selftest import *
+from .selftest import SELFTEST
+from .info import INFO
 
 
 class AES(COMMAND_PACKET):

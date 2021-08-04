@@ -9,3 +9,5 @@ i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
 
 atecc = ATECC(i2c)
 print(atecc.serial_number)
+
+print(atecc.version())

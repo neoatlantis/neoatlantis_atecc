@@ -2,20 +2,23 @@
 
 from ..crc16 import crc16
 
-def read_param(param, length1=None, length2=None):
+def read_param(param, length=None):
     print(type(param))
     assert type(param) in [bytearray, bytes, list, int]
     if type(param) == int:
-        param = bytearray([param])
+        assert param >= 0 and length != None
+        l = []
+        for i in range(0, length):
+            c = param & 0xFF
+            l.append(c)
+            c = c >> 8
+        param = bytearray(l)
     if type(param) == list:
         param = bytearray(param)
     if type(param) == bytes:
         param = bytearray(param)
-    if length1 != None:
-        if length2 == None:
-            assert len(param) == length1
-        else:
-            assert length1 <= len(param) <= length2
+    if length != None:
+        assert len(param) == length
     return param
 
 
@@ -27,7 +30,7 @@ class COMMAND_PACKET:
     def __init__(self, opcode, param1, param2, data=b''):
         self._opcode = read_param(opcode, 1)
         self._param1 = read_param(param1, 1)
-        self._param2 = read_param(param2, 1, 2)
+        self._param2 = read_param(param2, 2)
         self._data = read_param(data)
 
         self._debug = True
