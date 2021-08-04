@@ -247,7 +247,7 @@ class ATECC:
         self.idle()
 
         ret = bytearray(4)
-        command = INFO(mode=INFO.MODE.STATE, param=slot)
+        command = INFO(mode=INFO.MODE.KEYVALID, param=slot)
         self._send_command2(command)
         time.sleep(0.001)
         self._get_response(ret)
