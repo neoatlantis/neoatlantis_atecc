@@ -6,10 +6,13 @@
 # Modified by NeoAtlantis <aurichalka@gmail.com>
 
 
-#from adafruit_bus_device.i2c_device import I2CDevice
+from adafruit_bus_device.i2c_device import I2CDevice
 #from adafruit_binascii import hexlify
 
 from .commands import COMMAND_PACKET, SELFTEST
+
+
+
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/neoatlantis/neoatlantis_atecc.git"
