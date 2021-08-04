@@ -3,7 +3,6 @@
 from ..crc16 import crc16
 
 def read_param(param, length=None):
-    print(type(param))
     assert type(param) in [bytearray, bytes, list, int]
     if type(param) == int:
         assert param >= 0 and length != None
