@@ -6,11 +6,13 @@
 # Modified by NeoAtlantis <aurichalka@gmail.com>
 
 
-from adafruit_bus_device.i2c_device import I2CDevice
-from adafruit_binascii import hexlify
+#from adafruit_bus_device.i2c_device import I2CDevice
+#from adafruit_binascii import hexlify
 
-__version__ = "0.0.0-auto.0"
-__repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ATECC.git"
+from .commands import COMMAND_PACKET, SELFTEST
+
+__version__ = "0.0.1"
+__repo__ = "https://github.com/neoatlantis/neoatlantis_atecc.git"
 
 
 def _convert_i2c_addr_to_atecc_addr(i2c_addr=0x60):
@@ -25,35 +27,35 @@ _REG_ATECC_ADDR = _convert_i2c_addr_to_atecc_addr(i2c_addr=_I2C_ADDR)
 _REG_ATECC_DEVICE_ADDR = _REG_ATECC_ADDR >> 1
 
 # Version Registers
-_ATECC_508_VER = const(0x50)
-_ATECC_608_VER = const(0x60)
+_ATECC_508_VER = (0x50)
+_ATECC_608_VER = (0x60)
 
 # Clock constants
 _WAKE_CLK_FREQ = 100000  # slower clock speed
 _TWLO_TIME = 6e-5  # TWlo, in microseconds
 
 # Command Opcodes (9-1-3)
-OP_COUNTER = const(0x24)
-OP_INFO = const(0x30)
-OP_NONCE = const(0x16)
-OP_RANDOM = const(0x1B)
-OP_SHA = const(0x47)
-OP_LOCK = const(0x17)
-OP_GEN_KEY = const(0x40)
-OP_SIGN = const(0x41)
-OP_WRITE = const(0x12)
+OP_COUNTER = (0x24)
+OP_INFO = (0x30)
+OP_NONCE = (0x16)
+OP_RANDOM = (0x1B)
+OP_SHA = (0x47)
+OP_LOCK = (0x17)
+OP_GEN_KEY = (0x40)
+OP_SIGN = (0x41)
+OP_WRITE = (0x12)
 
 # Maximum execution times, in milliseconds (9-4)
 EXEC_TIME = {
-    OP_COUNTER: const(20),
-    OP_INFO: const(1),
-    OP_NONCE: const(7),
-    OP_RANDOM: const(23),
-    OP_SHA: const(47),
-    OP_LOCK: const(32),
-    OP_GEN_KEY: const(115),
-    OP_SIGN: const(70),
-    OP_WRITE: const(26),
+    OP_COUNTER: (20),
+    OP_INFO: (1),
+    OP_NONCE: (7),
+    OP_RANDOM: (23),
+    OP_SHA: (47),
+    OP_LOCK: (32),
+    OP_GEN_KEY: (115),
+    OP_SIGN: (70),
+    OP_WRITE: (26),
 }
 
 """
@@ -192,6 +194,18 @@ class ATECC:
         serial_num = str(hexlify(serial_num), "utf-8")
         serial_num = serial_num.upper()
         return serial_num
+
+    def selftest(self):
+        self.wakeup()
+        self.idle()
+        command = SELFTEST()
+        self._send_comamnd2(command)
+        time.sleep(0.5)
+        
+        res = bytearray(1)
+        self._get_response(res)
+        print("Self test:", res[0])
+        return res[0]
 
     def version(self):
         """Returns the ATECC608As revision number"""
@@ -457,6 +471,14 @@ class ATECC:
         self._get_response(buffer)
         time.sleep(0.001)
         self.idle()
+
+    def _send_command2(self, command):
+        command_data = bytearray(bytes(command))
+        self.wakeup()
+        with self._i2c_device as i2c:
+            i2c.write(command_packet)
+        # small sleep
+        time.sleep(0.001)
 
     def _send_command(self, opcode, param_1, param_2=0x00, data=""):
         """Sends a security command packet over i2c.
