@@ -14,3 +14,6 @@ print(atecc.version())
 
 print("\nstate")
 print(atecc.state())
+
+print("\nkey 8 valid")
+print(atecc.keyvalid(8))

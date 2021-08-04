@@ -242,6 +242,16 @@ class ATECC:
         self._get_response(ret)
         return ret[0], ret[1]
         
+    def keyvalid(self, slot=0):
+        self.wakeup()
+        self.idle()
+
+        ret = bytearray(4)
+        command = INFO(mode=INFO.MODE.STATE, param=slot)
+        self._send_command2(command)
+        time.sleep(0.001)
+        self._get_response(ret)
+        return ret[0]
 
     def lock_all_zones(self):
         """Locks Config, Data and OTP Zones."""
