@@ -227,6 +227,18 @@ class ATECC:
         self._get_response(vers)
         return (vers[2] << 8) | vers[3]
 
+    def state(self):
+        self.wakeup()
+        self.idle()
+
+        ret = bytearray(4)
+        command = INFO(mode=INFO.MODE.STATE)
+        self._send_command2(command)
+        time.sleep(0.01)
+        self._get_response(ret)
+        return ret[0], ret[1]
+        
+
     def lock_all_zones(self):
         """Locks Config, Data and OTP Zones."""
         self.lock(0)

@@ -11,3 +11,6 @@ atecc = ATECC(i2c)
 print(atecc.serial_number)
 
 print(atecc.version())
+
+print("\nstate")
+print(atecc.state())
