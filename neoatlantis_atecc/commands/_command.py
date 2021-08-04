@@ -40,7 +40,7 @@ class COMMAND_PACKET:
         :param byte param_3 data: Optional remaining input data.
         """
         # assembling command packet
-        command_packet = bytearray(8 + len(data))
+        command_packet = bytearray(8 + len(self._data))
         # word address
         command_packet[0] = 0x03
         # i/o group: count
