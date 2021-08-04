@@ -6,10 +6,14 @@
 # Modified by NeoAtlantis <aurichalka@gmail.com>
 
 
+import time
 from adafruit_bus_device.i2c_device import I2CDevice
 #from adafruit_binascii import hexlify
 
+
 from .commands import COMMAND_PACKET, SELFTEST
+
+
 
 
 
