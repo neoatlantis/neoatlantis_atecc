@@ -483,7 +483,7 @@ class ATECC:
         command_data = bytearray(bytes(command))
         self.wakeup()
         with self._i2c_device as i2c:
-            i2c.write(command_packet)
+            i2c.write(command_data)
         # small sleep
         time.sleep(0.001)
 
