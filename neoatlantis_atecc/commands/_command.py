@@ -46,10 +46,10 @@ class COMMAND_PACKET:
         # i/o group: count
         command_packet[1] = len(command_packet) - 1  # count
         # security command packets
-        command_packet[2] = self._opcode
-        command_packet[3] = self._param_1
-        command_packet[4] = self._param_2 & 0xFF
-        command_packet[5] = self._param_2 >> 8
+        command_packet[2] = self._opcode[0]
+        command_packet[3] = self._param1[0]
+        command_packet[4] = self._param2[0]# & 0xFF
+        command_packet[5] = self._param2[1]# >> 8
         for i, cmd in enumerate(self._data):
             command_packet[6 + i] = cmd
         if self._debug:
