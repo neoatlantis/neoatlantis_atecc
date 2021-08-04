@@ -8,7 +8,7 @@
 
 import time
 from adafruit_bus_device.i2c_device import I2CDevice
-#from adafruit_binascii import hexlify
+from adafruit_binascii import hexlify
 
 
 from .commands import COMMAND_PACKET, SELFTEST, INFO
@@ -220,11 +220,15 @@ class ATECC:
         self.idle()
 
         vers = bytearray(4)
-        #vers = self.info(0x00)
+        vers = self.info(0x00)
+        print('Method1', vers)
+
+        vers = bytearray(4)
         command = INFO(mode=INFO.MODE.REVISION)
         self._send_command2(command)
         time.sleep(0.01)
         self._get_response(vers)
+        print('Method2', vers)
         return (vers[2] << 8) | vers[3]
 
     def state(self):
