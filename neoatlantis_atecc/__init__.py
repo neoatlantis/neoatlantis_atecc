@@ -206,7 +206,7 @@ class ATECC:
         self.wakeup()
         self.idle()
         command = SELFTEST()
-        self._send_comamnd2(command)
+        self._send_command2(command)
         time.sleep(0.5)
         
         res = bytearray(1)
