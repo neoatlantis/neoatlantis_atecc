@@ -17,3 +17,6 @@ print(atecc.state())
 
 print("\nkey 8 valid")
 print(atecc.keyvalid(8))
+
+print("all config")
+print(atecc.read_config())

@@ -26,11 +26,12 @@ def read_param(param, length=None):
 
 class COMMAND_PACKET:
 
-    def __init__(self, opcode, param1, param2, data=b''):
+    def __init__(self, opcode, param1, param2, data=b'', resp_size=4):
         self._opcode = read_param(opcode, 1)
         self._param1 = read_param(param1, 1)
         self._param2 = read_param(param2, 2)
         self._data = read_param(data)
+        self._resp_size = 4
 
         self._debug = True
 

@@ -259,6 +259,9 @@ class ATECC:
         self.lock(1)
 
     def lock(self, zone):
+        print("**** WARNING: NOT LOCKING THIS DEVICE. ****")
+        return
+
         """Locks specific ATECC zones.
         :param int zone: ATECC zone to lock.
         """
@@ -474,6 +477,20 @@ class ATECC:
         self._get_response(signature)
         self.idle()
         return signature
+
+    def read_config(self):
+        self.wakeup()
+        allret = []
+        for block in range(0,4):
+            command = READ(
+                length=READ.LENGTH.LENGTH_32, zone=READ.ZONE.CONFIG,
+                block=block)
+            ret = bytearray(32)
+            self._send_comand2(command)
+            self._get_response(ret)
+            allret.append(ret)
+            print(ret)
+        return b''.join(allret)
 
     def write_config(self, data):
         """Writes configuration data to the device's EEPROM.

@@ -19,5 +19,7 @@ class SELFTEST(COMMAND_PACKET):
             opcode=0x77,
             param1=int(mode),
             param2=b"\x00\x00",
-            data=b""
+            data=b"",
+
+            resp_size=1
         )

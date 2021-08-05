@@ -5,6 +5,7 @@ from ._command import COMMAND_PACKET
 
 from .selftest import SELFTEST
 from .info import INFO
+from .read import READ
 
 
 class AES(COMMAND_PACKET):
