@@ -6,6 +6,7 @@ from ._command import COMMAND_PACKET
 from .selftest import SELFTEST
 from .info import INFO
 from .read import READ
+from .genkey import GENKEY
 
 
 class AES(COMMAND_PACKET):
