@@ -11,7 +11,7 @@ from adafruit_bus_device.i2c_device import I2CDevice
 from adafruit_binascii import hexlify
 
 
-from .commands import COMMAND_PACKET, SELFTEST, INFO
+from .commands import COMMAND_PACKET, SELFTEST, INFO, READ
 
 
 
@@ -486,7 +486,7 @@ class ATECC:
                 length=READ.LENGTH.LENGTH_32, zone=READ.ZONE.CONFIG,
                 block=block)
             ret = bytearray(32)
-            self._send_comand2(command)
+            self._send_command2(command)
             self._get_response(ret)
             allret.append(ret)
             print(ret)

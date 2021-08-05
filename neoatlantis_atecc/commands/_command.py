@@ -10,7 +10,7 @@ def read_param(param, length=None):
         for i in range(0, length):
             c = param & 0xFF
             l.append(c)
-            c = c >> 8
+            param = param >> 8
         param = bytearray(l)
     if type(param) == list:
         param = bytearray(param)

@@ -19,15 +19,15 @@ class READ(COMMAND_PACKET):
         length=LENGTH.LENGTH_32, zone=ZONE.CONFIG,
         block=0, slot=None, offset=0
     ):
-        if zone == ZONE.CONFIG or zone == ZONE.OTP:
+        if zone == self.ZONE.CONFIG or zone == self.ZONE.OTP:
             assert slot == None, "Zone 'config' and 'otp' have no slots."
-            if zone == ZONE.CONFIG:
+            if zone == self.ZONE.CONFIG:
                 assert 0 <= block <= 3, "Invalid block id for zone 'config'."
-            if zone == ZONE.OTP:
+            if zone == self.ZONE.OTP:
                 assert 0 <= block <= 1, "Invlaid block id for zone 'data'."
             param2 = block << 3 # (10.5.1 zone encoding)
 
-        if zone == DATA:
+        if zone == self.ZONE.DATA:
             assert 0 <= slot <= 15, "Invalid slot id."
             if slot <= 7:
                 assert 0 <= block <= 1, "Invalid block id for slot %d" % slot
@@ -41,11 +41,13 @@ class READ(COMMAND_PACKET):
         param1 = int(zone) | int(length)
         param2 = param2 | (offset & 0b111)
 
+        print(block, "param1=%02x, param2=%04x" % (param1, param2))
+
         COMMAND_PACKET.__init__(self,
             opcode=0x02,
             param1=param1,
             param2=param2,
             data=b"",
 
-            resp_size=(32 if length == LENGTH.LENGTH_32 else 4)
+            resp_size=(32 if length == self.LENGTH.LENGTH_32 else 4)
         )
