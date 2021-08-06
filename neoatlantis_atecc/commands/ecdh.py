@@ -29,13 +29,13 @@ class ECDH(COMMAND_PACKET):
     ):
 
         assert len(data) == 64, "Missing public key."
-        if source_key == SOURCE_KEY.EEPROM:
+        if source_key == self.SOURCE_KEY.EEPROM:
             assert keyid != None
 
         mode = source_key | output_encryption | result_target
         param2 = keyid if keyid != None else 0x0000
 
-        if result_target == RESULT_TARGET.OUTPUT_BUFFER:
+        if result_target == self.RESULT_TARGET.OUTPUT_BUFFER:
             resp_size = 64
         else:
             resp_size = 1

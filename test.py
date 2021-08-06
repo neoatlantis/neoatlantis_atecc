@@ -20,3 +20,6 @@ print(atecc.keyvalid(8))
 
 print("all config")
 print(atecc.read_config())
+
+print("genkey tempkey")
+print(atecc.generate_ecdh_ephemeral_private_key())

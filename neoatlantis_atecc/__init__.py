@@ -11,7 +11,7 @@ from adafruit_bus_device.i2c_device import I2CDevice
 from adafruit_binascii import hexlify
 
 
-from .commands import COMMAND_PACKET, SELFTEST, INFO, READ
+from .commands import COMMAND_PACKET, SELFTEST, INFO, READ, GENKEY
 
 
 
@@ -434,6 +434,16 @@ class ATECC:
         assert len(digest) == 32, "SHA response length does not match expected length."
         self.idle()
         return digest
+
+    def generate_ecdh_ephemeral_private_key(self):
+        command = GENKEY(mode=GENKEY.MODE.GENERATE, keyid=0xFFFF, data=b'')
+        self.wakeup()
+        self._send_command2(command)
+        time.sleep(0.1)
+        ret = bytearray(64)
+        self._get_response(ret)
+        print("Public key:", ret)
+        return ret
 
     def gen_key(self, key, slot_num, private_key=False):
         """Generates a private or public key.

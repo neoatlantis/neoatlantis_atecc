@@ -7,6 +7,7 @@ from .selftest import SELFTEST
 from .info import INFO
 from .read import READ
 from .genkey import GENKEY
+from .ecdh import ECDH
 
 
 class AES(COMMAND_PACKET):
