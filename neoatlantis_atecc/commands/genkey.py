@@ -14,7 +14,7 @@ class GENKEY(COMMAND_PACKET):
 
         COMMAND_PACKET.__init__(self,
             opcode=0x40,
-            param1=mode,
+            param1=int(mode),
             param2=keyid,
             data=data,
 
