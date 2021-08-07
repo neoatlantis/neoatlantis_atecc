@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 from enum import IntEnum
 
-class ByteVariable(IntEnum):
+class ByteVariable:
     
-    def __init__(self, buf, default):
+    def __init__(self, buf, slice_start, slice_end):
         assert type(buf) == memoryview
-        self._value = default
         self._buffer = buf
-        IntEnum.__init__(self)
+        self._slice = (slice_start, slice_end)
 
     @property
     def value(self):
-        return self._value
+        return bytearray(bytes(self._buffer[self._slice[0]:self._slice[1]]))
 
     @value.setter
     def value(self, v):
-        self._value = v.value
-        self._buffer = self._value
+        self._buffer[self._slice[0]:self._slice[1]] = v
 
 
 
@@ -38,11 +36,12 @@ class BytesManipulator:
 if __name__ == "__main__":
     
     class TestV(ByteVariable):
-        
         A = 1
         B = 2
 
-    vb = bytesarray([0,0,0,0])
+    vb = bytearray([0,0,0,0])
     vbv = memoryview(vb)
-    v = TestV(vbv[3])
+    v = TestV(vbv, 3, 4)
     
+    v.value = b'\x10'
+    print(vb)
