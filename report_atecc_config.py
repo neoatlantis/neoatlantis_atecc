@@ -38,6 +38,7 @@ config_zone = ConfigurationZone(bytearray(config_value))
 slot_config = config_zone.slot_config
 print("\n")
 
+print("I2C ADDRESS:", config_zone.i2c_address.value)
 print("USE LOCK STATUS:", "Enabled=%s" % config_zone.use_lock.use_lock_enable, "Key=%d" % config_zone.use_lock.use_lock_key)
 
 print("Slot config value:")
