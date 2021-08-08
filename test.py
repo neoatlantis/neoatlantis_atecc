@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+import os
 import board
 import busio
 from neoatlantis_atecc import ATECC, _WAKE_CLK_FREQ
+from neoatlantis_atecc.configuration_zone import ConfigurationZone
+
+
 
 # Initialize the i2c bus
 i2c = busio.I2C(board.SCL, board.SDA, frequency=_WAKE_CLK_FREQ)
@@ -15,11 +19,16 @@ print(atecc.version())
 print("\nstate")
 print(atecc.state())
 
-print("\nkey 8 valid")
-print(atecc.keyvalid(8))
+#print("\nkey 8 valid")
+#print(atecc.keyvalid(8))
 
-print("all config")
-print(atecc.read_config())
+print("-" * 20 + " Read Configuration Zone " + "-" * 20)
+config_zone = ConfigurationZone(bytearray(atecc.read_config()))
+slot_config = config_zone.slot_config
 
-print("genkey tempkey")
-print(atecc.generate_ecdh_ephemeral_private_key())
+for i in range(0, 16):
+    slotiflags = getattr(slot_config, "slot%d" % i).flags
+    print("Slot %d\t" % i, ", ".join([e.name for e in slotiflags[0] + slotiflags[1]]))
+
+
+

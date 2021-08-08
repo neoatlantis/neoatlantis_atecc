@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from enum import Enum, IntEnum
+from ._base import *
 from ._function_proxy import FunctionProxy
 
 
@@ -32,7 +34,7 @@ class SlotWritePermission:
             (value & 0b0010) and 1 or 0, \
             (value & 0b0001) and 1 or 0
         ret = []
-        for each in FLAGS:
+        for each in SlotWritePermission.FLAGS:
             if each.value(a,b,c,d): ret.append(each)
         return ret
 
@@ -97,14 +99,15 @@ class SingleSlotConfig(ByteVariable):
 class SlotConfig(BytesManipulator):
 
     def __init__(self, view):
-        assert type(view) == memoryview and len(view) == 32
+        assert len(view) == 32
+        BytesManipulator.__init__(self, view)
 
     def _setup_variables(self):
         for i in range(0, 16):
             setattr(
                 self,
                 "slot%d" % i,
-                SingleSlotConfig(self.view, start=20+i*2)
+                SingleSlotConfig(self.view, start=i*2)
             )
 
 
@@ -128,6 +131,13 @@ if __name__ == "__main__":
         PRIVWRITE_ALLOWED     = lambda a,b,c,d: b==1
         PRIVWRITE_FORBIDDEN   = lambda a,b,c,d: b==0
     """
-    slotconfigbuffer = memoryview(bytearray(32))
+    sample_config  = bytearray.fromhex("""
+                    20 20 20 20  20 20 20 20 20 c0 00 55
+        00 83 20 87 20 87 20 87  2f 87 2f 8f 8f 9f 8f af
+        20 20 20 20""")
+    slotconfigbuffer = memoryview(sample_config)
 
+    slotconfig = SlotConfig(slotconfigbuffer)
+    slot0 = slotconfig.slot0
 
+    print("slot0", slot0.flags)
