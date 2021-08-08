@@ -5,7 +5,7 @@ from ._base import *
 from ._function_proxy import FunctionProxy
 
 
-class SlotWritePermission:
+class WriteConfig:
     
     class FLAGS(Enum):
         WRITE_ALWAYS      = FunctionProxy(lambda a,b,c,d: a==b==c==d==0)
@@ -91,7 +91,34 @@ class SingleSlotConfig(ByteVariable):
             if val & e.value:
                 ret.append(e)
         return ret, SlotWritePermission.parseflags(val)
-            
+    
+    @value.setter
+    def value(self, read_key, write_key, *flags):
+        flags = list(flags)
+        assert 0 <= read_key <= 15
+        assert 0 <= write_key <= 15
+        write_config_flags = []
+        slot_flags = []
+        for e in flags:
+            if type(e) == self.FLAGS:
+                slot_flags.append(e)
+            if type(e) == WriteConfig.FLAGS:
+                write_config_flags.append(e)
+        assert set([e.name.split("_")[0] for e in write_config_flags]) ==\
+            set(["WRITE", "PRIVWRITE", "GENKEY", "DERIVEKEY"])
+
+        write_config_value = WriteConfig.getvalue(*write_config_flags)
+        slot_value = 0x00
+        for e in slot_flags:
+            slot_value |= e.value
+        readkey_value = read_key & 0b1111
+        writekey_value = (write_key & 0b1111) << 8
+        
+        ByteVariable.value =\
+            write_config_value | slot_value | readkey_value | writekey_value
+
+
+
 
 
 
