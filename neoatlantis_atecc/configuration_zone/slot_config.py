@@ -34,7 +34,7 @@ class WriteConfig:
             (value & 0b0010) and 1 or 0, \
             (value & 0b0001) and 1 or 0
         ret = []
-        for each in SlotWritePermission.FLAGS:
+        for each in WriteConfig.FLAGS:
             if each.value(a,b,c,d): ret.append(each)
         return ret
 
@@ -90,10 +90,9 @@ class SingleSlotConfig(ByteVariable):
         for e in self.FLAGS:
             if val & e.value:
                 ret.append(e)
-        return ret, SlotWritePermission.parseflags(val)
+        return ret, WriteConfig.parseflags(val)
     
-    @value.setter
-    def value(self, read_key, write_key, *flags):
+    def set(self, read_key, write_key, *flags):
         flags = list(flags)
         assert 0 <= read_key <= 15
         assert 0 <= write_key <= 15
@@ -114,7 +113,7 @@ class SingleSlotConfig(ByteVariable):
         readkey_value = read_key & 0b1111
         writekey_value = (write_key & 0b1111) << 8
         
-        ByteVariable.value =\
+        self.value =\
             write_config_value | slot_value | readkey_value | writekey_value
 
 
