@@ -23,8 +23,13 @@ print(atecc.state())
 #print(atecc.keyvalid(8))
 
 print("-" * 20 + " Read Configuration Zone " + "-" * 20)
-config_zone = ConfigurationZone(bytearray(atecc.read_config()))
+config_value = atecc.read_config()
+print("Current config value:")
+print(config_value.hex())
+config_zone = ConfigurationZone(bytearray(config_value))
 slot_config = config_zone.slot_config
+print("Slot config value:")
+print(bytes(slot_config.view).hex())
 
 for i in range(0, 16):
     slotiflags = getattr(slot_config, "slot%d" % i).flags
