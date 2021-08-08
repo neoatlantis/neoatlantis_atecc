@@ -91,11 +91,26 @@ class SingleSlotConfig(ByteVariable):
             if val & e.value:
                 ret.append(e)
         return ret, WriteConfig.parseflags(val)
+
+    @property
+    def write_key(self):
+        return self.value[1] & 0b1111
+
+    @property
+    def read_key(self):
+        return self.value[0] & 0b1111
+
+    @write_key.setter(self):
+    def write_key(self, value):
+        self.value[1] &= (0b11110000 | (value & 0b1111))
+
+    @read_key.setter(self):
+    def read_key(self, value):
+        self.value[0] &= (0b11110000 | (value & 0b1111))
     
-    def set(self, read_key, write_key, *flags):
+    @flags.setter
+    def flags(self, flags):
         flags = list(flags)
-        assert 0 <= read_key <= 15
-        assert 0 <= write_key <= 15
         write_config_flags = []
         slot_flags = []
         for e in flags:
@@ -110,14 +125,12 @@ class SingleSlotConfig(ByteVariable):
         slot_value = 0x00
         for e in slot_flags:
             slot_value |= e.value
-        readkey_value = read_key & 0b1111
-        writekey_value = (write_key & 0b1111) << 8
+        readkey_value = self.read_key & 0b1111
+        writekey_value = (self.write_key & 0b1111) << 8
         
-        self.value =\
+        newvalue = \  # a 16-bit integer
             write_config_value | slot_value | readkey_value | writekey_value
-
-
-
+        self.value = bytearray([newvalue & 0xFF, (newvalue >> 8) & 0xFF])
 
 
 
