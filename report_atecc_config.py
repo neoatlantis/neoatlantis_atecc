@@ -40,8 +40,14 @@ print("Slot config value:")
 print(bytes(slot_config.view).hex())
 
 for i in range(0, 16):
-    slotiflags = getattr(slot_config, "slot%d" % i).flags
-    print("Slot %d\t" % i, ", ".join([e.name for e in slotiflags[0] + slotiflags[1]]))
+    sloti = getattr(slot_config, "slot%d" % i)
+    slotiflags = sloti.flags
+    print(
+        "Slot %d\t" % i,
+        "READ_KEY=%d" % sloti.read_key,
+        "WRITEKEY=%d" % sloti.write_key,
+        ", ".join([e.name for e in slotiflags[0] + slotiflags[1]])
+    )
 
 
 

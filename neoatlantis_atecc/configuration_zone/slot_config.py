@@ -100,11 +100,11 @@ class SingleSlotConfig(ByteVariable):
     def read_key(self):
         return self.value[0] & 0b1111
 
-    @write_key.setter(self):
+    @write_key.setter
     def write_key(self, value):
         self.value[1] &= (0b11110000 | (value & 0b1111))
 
-    @read_key.setter(self):
+    @read_key.setter
     def read_key(self, value):
         self.value[0] &= (0b11110000 | (value & 0b1111))
     
@@ -128,7 +128,8 @@ class SingleSlotConfig(ByteVariable):
         readkey_value = self.read_key & 0b1111
         writekey_value = (self.write_key & 0b1111) << 8
         
-        newvalue = \  # a 16-bit integer
+        # a 16-bit integer
+        newvalue = \
             write_config_value | slot_value | readkey_value | writekey_value
         self.value = bytearray([newvalue & 0xFF, (newvalue >> 8) & 0xFF])
 
