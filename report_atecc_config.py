@@ -6,6 +6,13 @@ import busio
 from neoatlantis_atecc import ATECC, _WAKE_CLK_FREQ
 from neoatlantis_atecc.configuration_zone import ConfigurationZone
 
+def show_hex(bytestring):
+    h = bytestring.hex()
+    chunksize = 32 
+    spaced = lambda l: " ".join([l[i:i+2] for i in range(0, len(l), 2)])
+    chunks = [ spaced(h[i:i+chunksize]) for i in range(0, len(h), chunksize) ]
+    return "\n".join(chunks)
+
 
 
 # Initialize the i2c bus
@@ -24,8 +31,9 @@ print(atecc.state())
 
 print("-" * 20 + " Read Configuration Zone " + "-" * 20)
 config_value = atecc.read_config()
+#config_value  = bytearray.fromhex("""0123bcae00005000455b669beec04500c0005500837181018371c10183718371 8371c171010183718371c1718371837183718371000000ff00020002ffffffff    00000000ffffffffffffffffffffffffffffffff00000000ffff000000000000        13003c0013003c0013003c0013003c003c003c0013003c0013003c0013003300""") # nitrokey sample
 print("Current config value:")
-print(config_value.hex())
+print(show_hex(bytes(config_value)))
 config_zone = ConfigurationZone(bytearray(config_value))
 slot_config = config_zone.slot_config
 print("Slot config value:")
