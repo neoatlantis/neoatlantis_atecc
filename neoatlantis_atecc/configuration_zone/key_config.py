@@ -26,7 +26,10 @@ class SingleKeyConfig(ByteVariable):
         val = self.value[0] | (self.value[1] << 8)
         ret = []
         for e in self.FLAGS:
-            if val & e.value:
+            if e.name.startswith("KEYTYPE_"):
+                if val & 0b00011100 == e.value:
+                    ret.append(e)
+            elif val & e.value:
                 ret.append(e)
         return ret
 
@@ -56,7 +59,7 @@ class SingleKeyConfig(ByteVariable):
             else:
                 raise Exception("Invalid flag for keyconfig.")
 
-        if len([e.name for e in key_flags if e.name.startswith("KEYTYPE_")) > 1:
+        if len([e.name for e in key_flags if e.name.startswith("KEYTYPE_")]) > 1:
             raise Exception("KEYTYPE must be set to only one flag.")
 
         key_value = 0x00
