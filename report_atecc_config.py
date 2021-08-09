@@ -36,6 +36,7 @@ print("Current config value:")
 print(show_hex(bytes(config_value)))
 config_zone = ConfigurationZone(bytearray(config_value))
 slot_config = config_zone.slot_config
+key_config = config_zone.key_config
 print("\n")
 
 print("I2C ADDRESS:", config_zone.i2c_address.value)
@@ -56,3 +57,15 @@ for i in range(0, 16):
 
 
 
+print("Key config value:")
+print(bytes(key_config.view).hex())
+
+for i in range(0, 16):
+    keyi = getattr(key_config, "key%d" % i)
+    keyiflags = keyi.flags
+    print(
+        "Key  %d\t" % i,
+        "AUTH_KEY=%d" % keyi.auth_key,
+        "X509id  =%d" % keyi.X509id,
+        ", ".join([e.name for e in keyiflags])
+    )
